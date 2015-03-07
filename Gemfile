@@ -5,6 +5,7 @@ gem 'pg'
 gem 'arel', '6.0.0.beta2'
 
 gem 'sidekiq'
-gem "resque", "~> 2.0.0.pre.1", github: "resque/resque"
+gem "resque"
 gem 'delayed_job_active_record'
 gem 'daemons'
+gem 'bcrypt-ruby'
