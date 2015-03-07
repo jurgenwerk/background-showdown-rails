@@ -1,14 +1,14 @@
-require 'calculations'
+require 'bcrypt'
 require 'benchmark'
 
 class CalculationJob < ActiveJob::Base
   queue_as :default
 
-  def perform(n)
+  def perform
     benchmark = Benchmark.measure do
-      Calculations::fibonacci(n)
+      BCrypt::Password.create("password", cost: 15)
     end
 
-    Measurement.create(seconds: benchmark.real, job_type: "calc")
+    Measurement.create(seconds: benchmark.total, job_type: "calc")
   end
 end
