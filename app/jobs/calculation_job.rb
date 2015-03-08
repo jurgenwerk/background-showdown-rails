@@ -5,10 +5,12 @@ class CalculationJob < ActiveJob::Base
   queue_as :default
 
   def perform
+    job_time = JobTime.create(time_start: DateTime.now)
+
     benchmark = Benchmark.measure do
       BCrypt::Password.create("password", cost: 15)
     end
 
-    Measurement.create(seconds: benchmark.total, job_type: "calc")
+    job_time.update_attributes(total: benchmark.total, time_end: DateTime.now)
   end
 end

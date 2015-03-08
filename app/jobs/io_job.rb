@@ -1,19 +1,16 @@
 require 'benchmark'
+require 'open-uri'
 
 class IoJob < ActiveJob::Base
   queue_as :default
 
   def perform
+    job_time = JobTime.create(time_start: DateTime.now)
+
     benchmark = Benchmark.measure do
-      file_name = "io_job_#{SecureRandom.hex(5)}.txt"
-
-      10000.times do
-        File.open(file_name, 'a') { |f| f.write("#{SecureRandom.hex(1000)}") }
-      end
-
-      File.delete(file_name)
+      open('http://localhost:3001/')
     end
 
-    Measurement.create(seconds: benchmark.real, job_type: "io")
+    job_time.update_attributes(total: benchmark.total, time_end: DateTime.now)
   end
 end
